@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:padding="8dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textViewPedidos"
+        android:layout_alignParentLeft="true"
+        android:text="Pedidos"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        android:textSize="15dp"
+        android:textStyle="bold"
+        android:textColor="#52056E"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Entregue"
+        android:textColor="#c20A10"
+        android:textStyle="bold"
+        android:padding="5dp"
+        android:layout_alignParentRight="true"
+        android:id="@+id/textViewDelete"
+
+        />
+
+
+    <TextView
+        android:id="@+id/textViewAlterar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="86dp"
+        android:padding="5dp"
+        android:text="Alterar"
+        android:textColor="#0231C7"
+        android:textStyle="bold" />
+
+
+
+
+
+</RelativeLayout>
