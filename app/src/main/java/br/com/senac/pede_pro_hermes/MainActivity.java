@@ -21,8 +21,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import br.com.senac.pede_pro_hermes.webservice.RequestHandler;
 import br.com.senac.pede_pro_hermes.modelo.PedeproHermes;
 import br.com.senac.pede_pro_hermes.webservice.Api;
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     ProgressBar progressBar;
     ListView listView;
     List<PedeproHermes>pedeprohermesList;
+
     Boolean isUpdating=false;
 
 
@@ -54,39 +57,36 @@ public class MainActivity extends AppCompatActivity {
 
         progressBar =findViewById(R.id.barraProgresso);
         listView =findViewById(R.id.listViewTarefas);
-        buttonSalvar =findViewById(R.id.buttonSalvar);
         editTextValor =findViewById(R.id.editTextValor);
         editTextTamanho =findViewById(R.id.editTextTamanho);
         editTextMarca= findViewById(R.id.editTextMarca);
         editTextModelo=findViewById(R.id.editTextModelo);
         editTextCliente=findViewById(R.id.editTextCliente);
-        editTextIdPedido= findViewById(R.id.editTextIdPedido);
+        editTextIdPedido=findViewById(R.id.editTextIdPedido);
+        buttonSalvar =findViewById(R.id.buttonSalvar);
+        pedeprohermesList = new ArrayList<>();
+
 
         buttonSalvar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isUpdating) {
+                if (isUpdating){
                     updatePedeproHermes();
-                }else{
-                    createPedeproHermes();
 
+                } else{
+                    createPedeproHermes();
                 }
             }
         });
         readPedeproHermes();
     }
     private void createPedeproHermes(){
-        String id = editTextIdPedido.getText().toString().trim();
         String cliente = editTextCliente.getText().toString().trim();
-        String modelo  = editTextModelo .getText().toString().trim();
         String marca = editTextMarca.getText().toString().trim();
+        String modelo  = editTextModelo .getText().toString().trim();
         String tamanho = editTextTamanho.getText().toString().trim();
         String valor = editTextValor.getText().toString().trim();
-        if(TextUtils.isEmpty(id)){
-            editTextIdPedido.setError("Digite o Cógigo");
-            editTextIdPedido.requestFocus();
-            return;
-        }
+
         if(TextUtils.isEmpty(cliente)){
             editTextCliente.setError("Digite o nome do Cliente");
             editTextCliente.requestFocus();
@@ -113,25 +113,38 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
+        HashMap<String, String> params = new HashMap<>();
+        params.put("cliente",cliente);
+        params.put("marca",marca);
+        params.put("modelo", modelo);
+        params.put("tamanho",tamanho);
+        params.put("valor", valor);
+
+        PerformNetworkRequest request = new PerformNetworkRequest(Api.URL_CREATE_PEDEPROHERMES, params, CODE_POST_REQUEST);
+        request.execute();
+
+
     }
 
     private void updatePedeproHermes(){
-        String id = editTextIdPedido.getText().toString().trim();
+        String id = editTextIdPedido.getText().toString();
         String cliente = editTextCliente.getText().toString().trim();
         String modelo  = editTextModelo .getText().toString().trim();
         String marca = editTextMarca.getText().toString().trim();
         String tamanho = editTextTamanho.getText().toString().trim();
         String valor = editTextValor.getText().toString().trim();
 
-        if(TextUtils.isEmpty(id)){
-            editTextIdPedido.setError("Digite o Cógigo");
-            editTextIdPedido.requestFocus();
-            return;
-        }
+
 
         if(TextUtils.isEmpty(cliente)){
             editTextCliente.setError("Digite o nome do Cliente");
             editTextCliente.requestFocus();
+            return;
+
+        }
+        if(TextUtils.isEmpty(marca)){
+            editTextMarca.setError("Digite a Marca");
+            editTextMarca.requestFocus();
             return;
         }
         if(TextUtils.isEmpty(modelo)){
@@ -139,11 +152,7 @@ public class MainActivity extends AppCompatActivity {
             editTextModelo.requestFocus();
             return;
         }
-        if(TextUtils.isEmpty(marca)){
-            editTextMarca.setError("Digite a Marca");
-            editTextMarca.requestFocus();
-            return;
-        }
+
         if(TextUtils.isEmpty(tamanho)){
             editTextTamanho.setError("Digite o Tamanho");
             editTextTamanho.requestFocus();
@@ -155,17 +164,17 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         HashMap<String,String> params =new HashMap<>();
-        params.put("id", id);
+        params.put("id",id);
         params.put("cliente",cliente);
-        params.put("modelo", modelo);
+        params.put("marca", marca);
+        params.put("modelo",modelo);
         params.put("tamanho",tamanho);
         params.put("valor", valor);
 
-        PerformNetworkRequest request = new PerformNetworkRequest(Api.URL_UPDATE_PEDEPROHERMES, params, CODE_POST_REQUEST);
+        PerformNetworkRequest request = new PerformNetworkRequest(Api.URL_UPDATE_PEDEPROHERMES, params, CODE_GET_REQUEST);
         request.execute();
 
         buttonSalvar.setText("Salvar");
-
         editTextCliente.setText("");
         editTextModelo.setText("");
         editTextMarca.setText("");
@@ -194,8 +203,8 @@ public class MainActivity extends AppCompatActivity {
             pedeprohermesList.add(new PedeproHermes(
                     obj.getInt("id"),
                     obj.getString("cliente"),
-                    obj.getString("modelo "),
                     obj.getString("marca"),
+                    obj.getString("modelo"),
                     obj.getString("tamanho"),
                     obj.getString("valor")
             ));
@@ -304,7 +313,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     isUpdating=true;
-                    editTextIdPedido.setText(String.valueOf(pedeproHermes.getId()));
+
                     editTextCliente.setText(String.valueOf(pedeproHermes.getCliente()));
                     editTextModelo.setText(String.valueOf(pedeproHermes.getModelo()));
                     editTextMarca.setText(String.valueOf(pedeproHermes.getMarca()));

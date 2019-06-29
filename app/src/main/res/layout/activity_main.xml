@@ -108,10 +108,10 @@
 
     <ListView
         android:id="@+id/listViewTarefas"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="401dp"
+        android:layout_height="209dp"
         android:layout_below="@+id/linearLayout"
-        >
+        android:layout_marginTop="-2dp">
 
     </ListView>
 
@@ -122,5 +122,7 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:visibility="gone" />
+
+
 
 </RelativeLayout>
